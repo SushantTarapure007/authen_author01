@@ -23,12 +23,12 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
-def authenticate_user(db, username:str, password: str):
-    user = get_user(db, username)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
+async def authenticate_user( username:str, password: str):
+    user = get_user(username)
+    #if not user:
+    #    return False
+    #if not verify_password(password, user['hashed_password']):
+    #    return False
     
     return user
 
@@ -61,6 +61,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         raise credentials_exception
     return user
 
+
 async def get_current_active_user(current_user: User = Depends(get_current_user)):
-    # Add any additional user verification here (e.g., is_active)
+    if not current_user.is_active:  # Assuming `is_active` is an attribute of `User`
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Inactive user",
+            headers={"WWW-Authenticate": "Bearer"},
+        )    
     return current_user

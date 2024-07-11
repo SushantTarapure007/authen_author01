@@ -19,7 +19,7 @@ class PyObjectId(ObjectId):
         return schema
 
 class User(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: PyObjectId | str = Field(default_factory=PyObjectId, alias="_id")
     username: str
     hashed_password: str
     roles: List[str] = []
@@ -30,7 +30,7 @@ class User(BaseModel):
         json_encoders = {ObjectId: str}
 
 class Role(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: PyObjectId | str = Field(default_factory=PyObjectId, alias="_id")
     name: str
     permissions: List[str] = []
 

@@ -8,9 +8,9 @@ db = client["notes"]
 
 async def get_user(username: str):
     user = await db["users"].find_one({"username": username})
-    if user:
-        return User(**user)
-
+    #f user:
+    #    return User(**user)
+    return user
 async def create_user(user: User):
     await db["users"].insert_one(user.dict(by_alias=True))
 
